@@ -1,3 +1,3 @@
 data_directory = './results'
-code_directory = './scripts'
+code_directory = '.'
 training_directory = './training_test_data'
