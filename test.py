@@ -28,6 +28,9 @@ def test():
     faces = os.path.join(current_directory, training_directory, 'test_face_photos')
     nonfaces = os.path.join(current_directory, training_directory, 'test_nonfaces')
 
+    false_positives = 0
+    false_negatives = 0
+
     # Iterate through all the faces in the test_face_photos folder
     for filename in os.listdir(faces):
         # Check if the file has a .jpg extension
@@ -41,10 +44,10 @@ def test():
     
     for filename in os.listdir(nonfaces):
         # Load the image
-            image = cv2.imread(filename)
-            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            skin_mask = test_skin(image_rgb)
+        image = cv2.imread(filename)
+        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        skin_mask = test_skin(image_rgb)
 
-            #USE MODEL FOR FACE DETECTION
+        #USE MODEL FOR FACE DETECTION
 
-    return
+    return false_positives, false_negatives
