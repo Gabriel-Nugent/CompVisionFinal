@@ -70,42 +70,44 @@ def train():
 
 def generate_classifier(height, width):
     rand_num = np.random.randint(1,6)
-    filter = np.zeros(shape=(height, width))
+    f_height = np.random.randint(4, height)
+    f_width = np.random.randint(4, width)
+    filter = np.zeros(shape=(f_height, f_width))
     match(rand_num):
         case 1:
-            for i in range(height):
-                for j in range(width):
-                    if (j < width / 2):
+            for i in range(f_height):
+                for j in range(f_width):
+                    if (j < f_width / 2):
                         filter[i, j] = 1
                     else:
                         filter[i, j] = -1
         case 2:
-            for i in range(height):
-                for j in range(width):
-                    if (i < height / 2):
+            for i in range(f_height):
+                for j in range(f_width):
+                    if (i < f_height / 2):
                         filter[i, j] = 1
                     else:
                         filter[i, j] = -1
         case 3:
-            for i in range(height):
-                for j in range(width):
-                    if (j < width / 3 or j > width / (2/3) ):
+            for i in range(f_height):
+                for j in range(f_width):
+                    if (j < f_width / 3 or j > f_width / (2/3) ):
                         filter[i, j] = 1
                     else:
                         filter[i, j] = -1
         case 4:
-            for i in range(height):
-                for j in range(width):
-                    if (i < height / 3 or i > height / (2/3) ):
+            for i in range(f_height):
+                for j in range(f_width):
+                    if (i < f_height / 3 or i > f_height / (2/3) ):
                         filter[i, j] = 1
                     else:
                         filter[i, j] = -1
         case 5:
-            for i in range(height):
-                for j in range(width):
-                    if (i < height / 2 and j < width / 2):
+            for i in range(f_height):
+                for j in range(f_width):
+                    if (i < f_height / 2 and j < f_width / 2):
                         filter[i, j] = 1
-                    elif (i > height / 2 and j > width / 2):
+                    elif (i > f_height / 2 and j > f_width / 2):
                         filter[i, j] = 1
                     else:
                         filter[i, j] = -1
