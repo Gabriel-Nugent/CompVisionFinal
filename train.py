@@ -1,8 +1,12 @@
+# python libs
 import numpy as np
 import matplotlib as plt
 import config
 import os
 import sys
+
+# imported from class repository
+from boosting import *
 
 # Get the absolute path of the script's directory
 current_directory = os.path.abspath(os.path.dirname(__file__))
@@ -66,4 +70,10 @@ def train():
     # apply every classifier to every integral image
     for i, integral in enumerate(training_data):
         for j, classifier in enumerate(classifiers):
-            responses[i, j] = eval_weak_classifier(integral, classifier)
+            responses[i, j] = eval_weak_classifier(classifier, integral)
+
+    # train boosting model to detect 
+    num_classifiers = 15  # Define the number of weak classifiers to to select
+    boosted_classifier = adaboost(responses, labels, num_classifiers)  # Run the AdaBoost algorithm
+
+    np.save("data/boosted_classifier.npy", boosted_classifier)
