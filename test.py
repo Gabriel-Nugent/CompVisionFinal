@@ -35,6 +35,7 @@ def test():
     boosted_model = np.load('results/boosted_classifiers.npy', allow_pickle=True)
     weak_classifiers = np.load('results/weak_classifiers.npy', allow_pickle=True)
 
+    # Load test data
     face_test_data = []
     face_image_name = []
     nonface_test_data = []
@@ -57,17 +58,18 @@ def test():
         image_data = cv2.imread(os.path.join(cropped_faces, filename), cv2.IMREAD_GRAYSCALE).astype(np.float32)
         cropped_face_data.append(image_data)
 
+    # combine test data and generate labels
     test_data = face_test_data + nonface_test_data
     filenames = face_image_name + nonface_image_name
     labels = np.array([1] * len(face_test_data) + [-1] * len(nonface_test_data))
 
-
-    test_data = test_data[0]
-
     false_positives = 0
     false_negatives = 0
 
+    # run testing on face and non face images
     for i in range(len(test_data)):
+        
+        # extract 100 x 100 windows from image
         skin_data = test_skin(test_data[i])
         image = np.array(test_data[i])
         image_data = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
@@ -81,6 +83,8 @@ def test():
                 if skin_data[x,y] > 0:
                     windows.append(image_data[x-50:x+50,y-50:y+50])
                     window_indices.append((x,y))
+
+        # perform cascade of classifiers
         for rounds in range(CASCADE_ROUNDS):
             results = boosted_predict(np.asarray(windows),boosted_model,weak_classifiers,pow(rounds,5))
             temp_windows = []
@@ -92,9 +96,11 @@ def test():
             windows = temp_windows
             window_indices = temp_indices
 
+        # any detections on non faces equal false positivefs
         if labels[i] == -1:
             false_positives += len(windows)
 
+        # draw bounding boxes for all windows that have not been dropped
         for idx in range(len(windows)):
             top = window_indices[idx][0] - 50
             bottom = window_indices[idx][0] + 50
@@ -103,6 +109,7 @@ def test():
             image = draw_rectangle(image, top, bottom, left, right)
             cv2.imwrite(os.path.join(current_directory,data_directory,filenames[i]))
 
+    # run tests on cropped faces
     for i in range(len(cropped_face_data)):
         image = np.array(cropped_face_data[i])
         result = boosted_predict(image,boosted_model,weak_classifiers)
