@@ -17,9 +17,9 @@ def detect_skin(image, positive_histogram, negative_histogram):
     factor = 256 / histogram_bins
     
     # Calculate indices for each color channel
-    red_indices = (image[:, :, 0] / factor).astype(int)
+    blue_indices = (image[:, :, 0] / factor).astype(int)
     green_indices = (image[:, :, 1] / factor).astype(int)
-    blue_indices = (image[:, :, 2] / factor).astype(int)
+    red_indices = (image[:, :, 2] / factor).astype(int)
     
     # Fetch probabilities from histograms using the indices
     skin_values = positive_histogram[red_indices, green_indices, blue_indices]
