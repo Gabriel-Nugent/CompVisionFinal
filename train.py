@@ -24,7 +24,7 @@ parent_directory = os.path.dirname(current_directory)
 # Add the parent directory to sys.path
 sys.path.append(parent_directory)
 
-CLASSIFIER_COUNT = 2000 # Define the number of weak classifiers to process
+CLASSIFIER_COUNT = 2500 # Define the number of weak classifiers to process
 ADA_CLASSIFIER_COUNT = 50  # Define the number of weak classifiers to run Adaboost on
 
 """
