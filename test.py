@@ -85,8 +85,8 @@ def test():
                     window_indices.append((x,y))
 
         # perform cascade of classifiers
-        for rounds in range(CASCADE_ROUNDS):
-            results = boosted_predict(np.asarray(windows),boosted_model,weak_classifiers,pow(rounds,5))
+        for round in range(1, CASCADE_ROUNDS + 1):
+            results = boosted_predict(np.asarray(windows),boosted_model,weak_classifiers,round * 5)
             temp_windows = []
             temp_indices = []
             for idx in range(len(results)):
@@ -96,18 +96,20 @@ def test():
             windows = temp_windows
             window_indices = temp_indices
 
-        # any detections on non faces equal false positives
-        if labels[i] == -1:
-            false_positives += len(windows)
-
         # draw bounding boxes for all windows that have not been dropped
         for idx in range(len(windows)):
+            # any detections on non faces equal false positives
+            if labels[i] == -1:
+                false_positives += len(windows)
+
             top = window_indices[idx][0] - 50
             bottom = window_indices[idx][0] + 50
             left = window_indices[idx][1] - 50
             right = window_indices[idx][1] + 50
             image = draw_rectangle(image, top, bottom, left, right)
-            cv2.imwrite(os.path.join(current_directory,data_directory,filenames[i]))
+            cv2.imwrite(os.path.join(current_directory,data_directory,filenames[i]), image)
+
+            
 
     # run tests on cropped faces
     for i in range(len(cropped_face_data)):

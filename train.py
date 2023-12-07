@@ -25,7 +25,7 @@ parent_directory = os.path.dirname(current_directory)
 sys.path.append(parent_directory)
 
 CLASSIFIER_COUNT = 100 # Define the number of weak classifiers to process
-ADA_CLASSIFIER_COUNT = 25  # Define the number of weak classifiers to run Adaboost on
+ADA_CLASSIFIER_COUNT = 15  # Define the number of weak classifiers to run Adaboost on
 
 """
 # @brief    evaluates a random set of weak classifiers using face and nonface data
