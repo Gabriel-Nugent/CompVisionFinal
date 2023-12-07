@@ -3,12 +3,14 @@ import config
 import sys
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 
 from boosting import boosted_predict
 from skin_detection import detect_skin
 from draw_rectangle import draw_rectangle
 
-CASCADE_ROUNDS = 3
+CASCADE_ROUNDS = 5
+ROUND_CLASSIFIERS = [1,2,5,10,15]
 
 # Get the absolute path of the script's directory
 current_directory = os.path.abspath(os.path.dirname(__file__))
@@ -68,7 +70,6 @@ def test():
 
     # run testing on face and non face images
     for i in range(len(test_data)):
-        
         # extract 100 x 100 windows from image
         skin_data = test_skin(test_data[i])
         image = np.array(test_data[i])
@@ -85,31 +86,42 @@ def test():
                     window_indices.append((x,y))
 
         # perform cascade of classifiers
-        for round in range(1, CASCADE_ROUNDS + 1):
-            results = boosted_predict(np.asarray(windows),boosted_model,weak_classifiers,round * 5)
+        for round in range(CASCADE_ROUNDS):
+            results = boosted_predict(np.asarray(windows),boosted_model,weak_classifiers,ROUND_CLASSIFIERS[round])
             temp_windows = []
             temp_indices = []
             for idx in range(len(results)):
-                if results[idx] > 0:
+                if results[idx] > 15:
                     temp_windows.append(windows[idx])
                     temp_indices.append(window_indices[idx])
             windows = temp_windows
             window_indices = temp_indices
 
+        # generate an image that shows the location of possible detected faces
+        box_image = np.zeros(shape=image_data.shape)
+        for idx in range(len(window_indices)):
+            box_image[window_indices[idx][0],window_indices[idx][1]] = 1
+
         # draw bounding boxes for all windows that have not been dropped
         for idx in range(len(windows)):
-            # any detections on non faces equal false positives
-            if labels[i] == -1:
-                false_positives += len(windows)
+            if (box_image[window_indices[idx][0],window_indices[idx][1]] == 1):
+                # any detections on non faces equal false positives
+                if labels[i] == -1:
+                    false_positives += 1
 
-            top = window_indices[idx][0] - 50
-            bottom = window_indices[idx][0] + 50
-            left = window_indices[idx][1] - 50
-            right = window_indices[idx][1] + 50
-            image = draw_rectangle(image, top, bottom, left, right)
-            cv2.imwrite(os.path.join(current_directory,data_directory,filenames[i]), image)
+                top = window_indices[idx][0] - 50
+                bottom = window_indices[idx][0] + 50
+                left = window_indices[idx][1] - 50
+                right = window_indices[idx][1] + 50
+                image = draw_rectangle(image, top, bottom, left, right)
+                cv2.imwrite(os.path.join(current_directory,data_directory,filenames[i]), image)
 
-            
+                # zero out surrounding windows to prevent overlapping boxes
+                box_image = cv2.rectangle(box_image, (left, top), (right, bottom), color=(0), thickness=-1)
+
+
+
+
 
     # run tests on cropped faces
     for i in range(len(cropped_face_data)):
