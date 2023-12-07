@@ -96,7 +96,7 @@ def test():
             windows = temp_windows
             window_indices = temp_indices
 
-        # any detections on non faces equal false positivefs
+        # any detections on non faces equal false positives
         if labels[i] == -1:
             false_positives += len(windows)
 
