@@ -565,7 +565,7 @@ def boosted_predict(images, boosted_model, weak_classifiers, classifier_number=N
         for j in range(classifier_number):
             # Access the tuple for each classifier
             classifier_tuple = boosted_model[j]
-            classifier_index = classifier_tuple[0]
+            classifier_index = int(classifier_tuple[0])
             classifier_alpha = classifier_tuple[1]
             classifier_threshold = classifier_tuple[2]
 

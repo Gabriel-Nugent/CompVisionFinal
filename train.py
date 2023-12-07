@@ -99,13 +99,8 @@ def train():
     elapsed_time = (time.perf_counter() - start_time) * 1000  # Convert to milliseconds
     print("\nPerforming Adaboost algorithm took", "{:.3f}".format(elapsed_time), "milliseconds\n")
 
-<<<<<<< HEAD
-    # save boosted and weak classifiers to data folder
-    np.save(os.path.join(output_dir,"boosted_classifiers.npy"), boosted_classifiers)
-=======
     # save boosted classifiers to data folder
-    np.save(os.path.join(output_dir,"boosted_classifier.npy"), boosted_classifier)
->>>>>>> a69b8c376a47f5d5c9993a0d224c4fea627534f7
+    np.save(os.path.join(output_dir,"boosted_classifiers.npy"), boosted_classifiers)
     np.save(os.path.join(output_dir,"weak_classifiers.npy"), classifiers)
 
 if __name__=="__main__": 
