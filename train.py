@@ -99,6 +99,7 @@ def train():
 
     # save boosted classifiers to data folder
     np.save(os.path.join(output_dir,"boosted_classifier.npy"), boosted_classifier)
+    np.save(os.path.join(output_dir,"weak_classifiers.npy"), classifiers)
 
 if __name__=="__main__": 
     train() 
