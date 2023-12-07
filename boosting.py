@@ -543,7 +543,6 @@ def boosted_predict(images, boosted_model, weak_classifiers, classifier_number=N
     result - The prediction value. Positive values indicate a positive class prediction,
              whereas negative values indicate a negative class prediction.
     """
-
     if classifier_number is None:
         # Use all weak classifiers selected by AdaBoost
         classifier_number = len(boosted_model)

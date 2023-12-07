@@ -2,7 +2,7 @@
 #   CS 4337.001
 #   Final Project:
 #   Adaboost skin detection
-#   Gabriel Nugent,
+#   Gabriel Nugent, Caleb Alvarez
 #   12/07/2023
 """
 
@@ -28,8 +28,10 @@ CLASSIFIER_COUNT = 100 # Define the number of weak classifiers to process
 ADA_CLASSIFIER_COUNT = 25  # Define the number of weak classifiers to run Adaboost on
 
 """
-# @brief  evaluates a random set of weak classifiers using face and nonface data
-#         and boosts a selected number of the best ones using the Adaboost algorithm
+# @brief    evaluates a random set of weak classifiers using face and nonface data
+#           and boosts a selected number of the best ones using the Adaboost algorithm
+#
+# @return   saves the boosted and weak classifiers to the data directory defined in config.py
 """
 def train():
     #----- LOAD TRAINING DATA -----#
@@ -92,13 +94,18 @@ def train():
     print("Running Adaboost algorithm with [", ADA_CLASSIFIER_COUNT, "] weak classifiers...\n")
     start_time = time.perf_counter()
 
-    boosted_classifier = adaboost(responses, labels, ADA_CLASSIFIER_COUNT)  # Run the AdaBoost algorithm
+    boosted_classifiers = adaboost(responses, labels, ADA_CLASSIFIER_COUNT)  # Run the AdaBoost algorithm
 
     elapsed_time = (time.perf_counter() - start_time) * 1000  # Convert to milliseconds
     print("\nPerforming Adaboost algorithm took", "{:.3f}".format(elapsed_time), "milliseconds\n")
 
+<<<<<<< HEAD
+    # save boosted and weak classifiers to data folder
+    np.save(os.path.join(output_dir,"boosted_classifiers.npy"), boosted_classifiers)
+=======
     # save boosted classifiers to data folder
     np.save(os.path.join(output_dir,"boosted_classifier.npy"), boosted_classifier)
+>>>>>>> a69b8c376a47f5d5c9993a0d224c4fea627534f7
     np.save(os.path.join(output_dir,"weak_classifiers.npy"), classifiers)
 
 if __name__=="__main__": 
